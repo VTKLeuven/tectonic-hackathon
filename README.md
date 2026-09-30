@@ -11,6 +11,8 @@ Kate Radar reads the transactions KBC already processes and turns the few that m
 
 Energy is the deep use case (solar, heat pump, EPC renovation obligation, EV switch, home charging, energy contract). Subscriptions, savings and a student's budget after a night out in Leuven show that the same pipeline is general.
 
+**Demo video (2:49):** [docs/kate-radar-demo.mp4](docs/kate-radar-demo.mp4)
+
 ## Description
 
 Banks personalise by asking: forms, questionnaires, campaigns. KBC already holds the richest signal there is, every transaction. Kate Radar reads it and turns the few moments that matter into timely, explainable advice inside KBC Mobile, delivered by Kate, without asking the customer a single question.
