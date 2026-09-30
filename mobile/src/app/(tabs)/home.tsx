@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { ArrowLeftRight, ChevronRight, PiggyBank } from 'lucide-react-native';
+import { ArrowLeftRight, ChevronRight, PiggyBank, Sparkles } from 'lucide-react-native';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,7 +14,7 @@ import { C, F, R, S, shadow } from '../../theme';
 export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { data, balance, analysis, lang, showToast } = useApp();
+  const { data, balance, analysis, lang, showToast, openVoice } = useApp();
   const persona = data.persona;
   const recent = [...analysis.transactions].reverse().slice(0, 5);
   const hour = new Date().getHours();
@@ -90,6 +90,15 @@ export default function Home() {
         {analysis.featured && (
           <View style={{ marginTop: S.xl }}>
             <FeaturedTip insight={analysis.featured} />
+            <Pressable
+              onPress={() => openVoice(analysis.featured ?? undefined)}
+              style={({ pressed }) => [styles.voiceBtn, pressed && { opacity: 0.85 }]}
+            >
+              <Sparkles size={16} color={C.blue} />
+              <T v="label" color={C.blue}>
+                {lang === 'nl' ? 'Beluister advies met Kate Voice' : 'Listen to Kate Voice advice'}
+              </T>
+            </Pressable>
           </View>
         )}
 
@@ -128,4 +137,18 @@ const styles = StyleSheet.create({
   savings: { flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.lg },
   savingsIcon: { width: 36, height: 36, borderRadius: 18, backgroundColor: C.bg, alignItems: 'center', justifyContent: 'center' },
   sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: S.xl, marginBottom: S.sm, paddingHorizontal: S.xs },
+  voiceBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: S.sm,
+    paddingVertical: 10,
+    paddingHorizontal: S.md,
+    backgroundColor: C.card,
+    borderRadius: R.md,
+    borderWidth: 1,
+    borderColor: C.kateBg,
+    ...shadow,
+  },
 });

@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { KateBanner, Toast } from '../components/Overlays';
+import { KateVoiceModal } from '../components/KateVoiceModal';
 import { AppProvider, useApp } from '../state/AppState';
 import { C } from '../theme';
 
@@ -22,7 +23,7 @@ export default function RootLayout() {
 }
 
 function Shell() {
-  const { ready } = useApp();
+  const { ready, voiceVisible, closeVoice, voiceTargetTip } = useApp();
   if (!ready) return <View style={{ flex: 1, backgroundColor: C.navy }} />;
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
@@ -34,6 +35,7 @@ function Shell() {
       </Stack>
       <KateBanner />
       <Toast />
+      <KateVoiceModal visible={voiceVisible} onClose={closeVoice} targetTip={voiceTargetTip} />
     </View>
   );
 }

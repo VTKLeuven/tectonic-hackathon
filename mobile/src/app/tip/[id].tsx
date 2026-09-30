@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { BellOff, ChevronDown, ChevronRight, Clock, Leaf, ThumbsDown, type LucideIcon } from 'lucide-react-native';
+import { BellOff, ChevronDown, ChevronRight, Clock, Leaf, Sparkles, ThumbsDown, type LucideIcon } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -9,12 +9,12 @@ import { Header, Page } from '../../components/Screen';
 import { Button, Card, Divider, T, tabular } from '../../components/ui';
 import { euro, formatDate, formatMoney, formatNumber, type RankedInsight, type Scenario } from '../../engine';
 import { useApp, useT } from '../../state/AppState';
-import { C, F, R, S } from '../../theme';
+import { C, F, R, S, shadow } from '../../theme';
 
 export default function TipDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { analysis, lang, giveFeedback, showToast } = useApp();
+  const { analysis, lang, giveFeedback, showToast, openVoice } = useApp();
   const t = useT();
   const insight = analysis.insights.find((i) => i.id === decodeURIComponent(id ?? ''));
   const [scenarioId, setScenarioId] = useState<string>('base');
@@ -86,6 +86,16 @@ export default function TipDetail() {
       <T v="body" color={C.body} style={{ marginTop: S.sm }}>
         {t(insight.summary)}
       </T>
+
+      <Pressable
+        onPress={() => openVoice(insight)}
+        style={({ pressed }) => [styles.voiceTipBtn, pressed && { opacity: 0.85 }]}
+      >
+        <Sparkles size={16} color={C.blue} />
+        <T v="label" color={C.blue}>
+          {lang === 'nl' ? 'Beluister toelichting van Kate' : "Listen to Kate's briefing"}
+        </T>
+      </Pressable>
 
       {annual !== undefined && (
         <Card style={{ marginTop: S.xl }}>
@@ -396,5 +406,19 @@ const styles = StyleSheet.create({
   },
   meter: { height: 6, borderRadius: 3, backgroundColor: C.kateBg, marginTop: 4, overflow: 'hidden' },
   meterFill: { height: 6, borderRadius: 3, backgroundColor: C.blue },
+  voiceTipBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: S.md,
+    paddingVertical: 10,
+    paddingHorizontal: S.md,
+    backgroundColor: C.card,
+    borderRadius: R.md,
+    borderWidth: 1,
+    borderColor: C.kateBg,
+    ...shadow,
+  },
 });
 

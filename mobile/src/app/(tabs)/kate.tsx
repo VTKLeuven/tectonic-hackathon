@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Info } from 'lucide-react-native';
+import { Info, Sparkles } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,7 +10,7 @@ import { InsightRow } from '../../components/InsightCard';
 import { Card, T } from '../../components/ui';
 import { euro, type Domain, type RankedInsight } from '../../engine';
 import { useApp } from '../../state/AppState';
-import { C, R, S } from '../../theme';
+import { C, R, S, shadow } from '../../theme';
 
 const FILTERS: { id: Domain | 'all'; nl: string; en: string }[] = [
   { id: 'all', nl: 'Alles', en: 'All' },
@@ -22,7 +22,7 @@ const FILTERS: { id: Domain | 'all'; nl: string; en: string }[] = [
 export default function Kate() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { analysis, lang } = useApp();
+  const { analysis, lang, openVoice } = useApp();
   const [filter, setFilter] = useState<Domain | 'all'>('all');
 
   const visible = analysis.insights.filter((i) => filter === 'all' || i.domain === filter);
@@ -44,6 +44,14 @@ export default function Kate() {
               {lang === 'nl' ? 'Tips uit je eigen verrichtingen. Zonder vragen.' : 'Tips from your own transactions. No questions asked.'}
             </T>
           </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Spreek met Kate"
+            onPress={() => openVoice()}
+            style={({ pressed }) => [styles.voiceHeaderBtn, pressed && { opacity: 0.8 }]}
+          >
+            <Sparkles size={18} color="#FFFFFF" />
+          </Pressable>
         </View>
         {total > 0 && (
           <View style={styles.total}>
@@ -58,6 +66,24 @@ export default function Kate() {
       </View>
 
       <ScrollView contentContainerStyle={{ padding: S.lg, paddingBottom: S.xxl * 2 }} showsVerticalScrollIndicator={false}>
+        <Pressable
+          onPress={() => openVoice()}
+          style={({ pressed }) => [styles.voiceBanner, pressed && { opacity: 0.9 }]}
+        >
+          <View style={styles.voiceBannerIcon}>
+            <Sparkles size={20} color={C.blue} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <T v="label" color={C.navy}>
+              {lang === 'nl' ? 'Spreek met Kate Voice' : 'Talk with Kate Voice'}
+            </T>
+            <T v="small" color={C.muted}>
+              {lang === 'nl'
+                ? 'Beluister je toelichting of stel een vraag over je opties.'
+                : 'Listen to your briefing or ask questions about your options.'}
+            </T>
+          </View>
+        </Pressable>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: S.sm }}>
           {FILTERS.map((f) => {
             const on = filter === f.id;
@@ -153,6 +179,34 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.lineStrong,
     borderStyle: 'dashed',
+  },
+  voiceHeaderBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: C.blue,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  voiceBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: S.md,
+    backgroundColor: C.card,
+    borderRadius: R.lg,
+    padding: S.md,
+    marginBottom: S.lg,
+    borderWidth: 1,
+    borderColor: C.line,
+    ...shadow,
+  },
+  voiceBannerIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: R.md,
+    backgroundColor: C.kateBg,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

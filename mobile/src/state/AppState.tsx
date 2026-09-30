@@ -97,6 +97,10 @@ interface AppState {
   dismissBanner(): void;
   toast: Toast | null;
   showToast(text: string): void;
+  voiceVisible: boolean;
+  voiceTargetTip?: RankedInsight;
+  openVoice(tip?: RankedInsight): void;
+  closeVoice(): void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -120,7 +124,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<Toast | null>(null);
   const [freshTxId, setFreshTxId] = useState<string | null>(null);
   const [today, setToday] = useState(todayISO());
+  const [voiceVisible, setVoiceVisible] = useState(false);
+  const [voiceTargetTip, setVoiceTargetTip] = useState<RankedInsight | undefined>(undefined);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const openVoice = useCallback((tip?: RankedInsight) => {
+    setVoiceTargetTip(tip);
+    setVoiceVisible(true);
+  }, []);
+
+  const closeVoice = useCallback(() => {
+    setVoiceVisible(false);
+    setVoiceTargetTip(undefined);
+  }, []);
 
   // Load what the customer chose earlier.
   useEffect(() => {
@@ -286,6 +302,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dismissBanner: () => setBanner(null),
     toast,
     showToast,
+    voiceVisible,
+    voiceTargetTip,
+    openVoice,
+    closeVoice,
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
