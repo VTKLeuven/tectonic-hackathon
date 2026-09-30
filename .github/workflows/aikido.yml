@@ -1,0 +1,41 @@
+name: Aikido Security AI Code Audit & Quality Gate
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  aikido-security-scan:
+    name: Aikido AI Code Audit & Dependency Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run Aikido AI Code Audit
+        # Aikido Official GitHub Action for SAST, DAST, IDOR, & Business Logic Audit
+        # Configured for Tectonic Hackathon 2026 (10% Security Score Guarantee)
+        uses: aikido-security/aikido-scan-action@v1
+        with:
+          api-key: ${{ secrets.AIKIDO_API_KEY }}
+          fail-on: "high,critical"
+          minimum-severity: "low"
+          repository: "kbc-sdworx-tectonic-bridge"
+          upload-sarif: true
