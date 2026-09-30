@@ -11,7 +11,7 @@ Kate Radar reads the transactions KBC already processes and turns the few that m
 
 Energy is the deep use case (solar, heat pump, EPC renovation obligation, EV switch, home charging, energy contract). Subscriptions, savings and a student's budget after a night out in Leuven show that the same pipeline is general.
 
-**Demo video (2:49):** [docs/kate-radar-demo.mp4](docs/kate-radar-demo.mp4)
+**Demo video (2:57):** [docs/kate-radar-demo.mp4](docs/kate-radar-demo.mp4)
 
 ## Description
 
