@@ -23,6 +23,7 @@ export interface DetectorContext {
 
 /** What the bank knows from onboarding (KYC). Not asked again. */
 export interface CustomerProfile {
+  id?: string;
   firstName: string;
   age: number;
 }

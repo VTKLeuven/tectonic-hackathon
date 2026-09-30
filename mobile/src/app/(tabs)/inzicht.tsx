@@ -122,6 +122,7 @@ const SIGNAL_CATEGORY: Record<string, CategoryId> = {
   streaming_stack: 'streaming',
   pension_saving: 'pension_saving',
   salary: 'income',
+  student_life: 'restaurants',
 };
 
 function Fact({ label, value }: { label: string; value: string }) {

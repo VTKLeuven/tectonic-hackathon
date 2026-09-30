@@ -63,6 +63,20 @@ describe('life events', () => {
     expect(moved?.confidence).toBeGreaterThan(0.9);
     expect(a.signals.some((s) => s.id === 'homeowner')).toBe(true);
   });
+
+  it('detects Jasper\'s student life signal at KU Leuven (VTK)', () => {
+    const a = run('jasper');
+    const student = a.signals.find((s) => s.id === 'student_life');
+    expect(student).toBeDefined();
+    expect(student!.confidence).toBeGreaterThanOrEqual(0.95);
+    expect(student!.label.nl).toContain('VTK');
+    expect(student!.data.weeklyAllowance).toBe(100);
+
+    // Non-students do not get student_life signal
+    for (const id of ['sarah', 'tom', 'janssens'] as const) {
+      expect(run(id).signals.some((s) => s.id === 'student_life')).toBe(false);
+    }
+  });
 });
 
 describe('insights', () => {
@@ -121,6 +135,20 @@ describe('insights', () => {
     expect(a.featured?.title.nl).toContain("'t ElixIr");
     expect(a.featured?.evidence.some((e) => e.label.nl.includes('DE NIJL'))).toBe(true);
     expect(a.featured?.evidence.some((e) => e.label.nl.includes('CAFE BELGE'))).toBe(true);
+    expect(a.featured?.reasons.some((r) => r.nl.includes('€ 28,50') && r.nl.includes('€ 140'))).toBe(true);
+  });
+
+  it('provisions specialized Swarm agents for Jasper student persona', () => {
+    const a = run('jasper');
+    expect(a.agents).toBeDefined();
+    expect(a.agents!.length).toBe(3);
+    const agentIds = a.agents!.map((ag) => ag.id);
+    expect(agentIds).toContain('cashflow_sentinel');
+    expect(agentIds).toContain('nightlife_radar');
+    expect(agentIds).toContain('campus_concierge');
+    const concierge = a.agents!.find((ag) => ag.id === 'campus_concierge');
+    expect(concierge?.verdict.nl).toContain('Alma 3');
+    expect(concierge?.verdict.nl).toContain('CuDi');
   });
 
   it('is deterministic', () => {

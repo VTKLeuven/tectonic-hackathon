@@ -126,7 +126,8 @@ export type SignalId =
   | 'energy_settlement'
   | 'streaming_stack'
   | 'pension_saving'
-  | 'salary';
+  | 'salary'
+  | 'student_life';
 
 /** Something the engine believes about the customer's situation, with the proof. */
 export interface Signal {
@@ -249,6 +250,17 @@ export interface Preferences {
   domains: Record<Domain, boolean>;
 }
 
+export interface SwarmAgent {
+  id: string;
+  name: string;
+  role: L10n;
+  icon: 'shield' | 'beer' | 'graduation-cap';
+  status: 'active' | 'evaluating' | 'idle';
+  confidence: number;
+  verdict: L10n;
+  metrics: { label: L10n; value: string }[];
+}
+
 export interface Analysis {
   today: ISODate;
   transactions: EnrichedTransaction[];
@@ -259,6 +271,8 @@ export interface Analysis {
   /** The single insight worth a spot on the home screen, if any. */
   featured: RankedInsight | null;
   energy: EnergyProfile;
+  /** Active specialized agents deliberating in the Kate Swarm */
+  agents?: SwarmAgent[];
 }
 
 export interface EnergyMonth {

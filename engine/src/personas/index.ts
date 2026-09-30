@@ -111,11 +111,11 @@ export const PERSONAS: Record<PersonaId, Persona> = {
     initials: 'JV',
     age: 20,
     city: 'Leuven',
-    household: l('Student op kot in Leuven', 'Student in dorm in Leuven'),
-    tagline: l('Student met € 100 leefgeld per week', 'Student with €100 weekly allowance'),
+    household: l('Student op kot in Leuven (VTK Burgerlijk Ingenieur)', 'Student in dorm in Leuven (VTK Engineering)'),
+    tagline: l('Student burgerlijk ingenieur met € 100 leefgeld per week', 'Engineering student with €100 weekly allowance'),
     story: l(
-      'Jasper studeert burgerlijk ingenieur in Leuven en krijgt elke week € 100 leefgeld van zijn ouders. Na een wilde nacht op de Oude Markt en een nachtelijke durum bij Snack De Nijl (€ 8,50) gaf hij in één nacht € 67 uit (67% van zijn weekbudget). Kate wekt hem met een vriendelijke wake-up call en toont hem hoe \'t ElixIr en andere fakbars zijn studentenbudget redden.',
-      'Jasper studies engineering in Leuven and receives €100 weekly allowance from his parents. Following a wild night on the Oude Markt and a late-night durum at Snack De Nijl (€8.50), he spent €67 in a single night (67% of his weekly budget). Kate wakes him with a gentle wake-up call and shows how \'t ElixIr and other fakbars protect his student budget.',
+      'Jasper studeert burgerlijk ingenieur aan de KU Leuven (VTK) en woont op kot in Leuven. Hij krijgt wekelijks € 100 leefgeld van zijn ouders, betaalt kot-internet en koopt cursussen bij de CuDi. Hij heeft een bescheiden spaarbuffer van € 140 en eet vaak in Alma 3 of TheoKot. Na een wilde nacht op de Oude Markt en een nachtelijke durum bij Snack De Nijl (€ 8,50) gaf hij in één nacht € 67 uit (67% van zijn weekbudget), waardoor zijn zichtrekening op € 28,50 staat. Kate wekt hem met een sympathieke wake-up call en toont hem hoe hij met \'t ElixIr en fakbars zijn weekbudget redt.',
+      'Jasper studies engineering at KU Leuven (VTK) and lives in a student dorm in Leuven. He receives €100 weekly allowance from his parents, pays kot internet and buys course books at CuDi. He maintains a modest €140 savings buffer and eats at Alma 3 or TheoKot. Following a wild night on the Oude Markt and a late-night durum at Snack De Nijl (€8.50), he spent €67 in a single night (67% of his weekly budget), leaving €28.50 on his current account. Kate wakes him with a friendly wake-up call and shows how \'t ElixIr and fakbars protect his weekly budget.',
     ),
     accountName: 'KBC-Jongerenrekening',
     iban: 'BE82 7330 1928 4421',
@@ -297,14 +297,27 @@ function jasper(anchor: ISODate): PersonaData {
 
   // Kot & student subscriptions
   led.every(30.4, -5.99, 'SPOTIFY', 'SPOTIFY STUDENT SUBSCRIPTION', 'card', { from: -380 });
+  led.every(30.4, -25.0, 'TELENET', 'TELENET KOT-NET STUDENT LEUVEN', 'direct_debit', { from: -240 });
 
-  // Regular student life in Leuven
-  led.scatter(0.25, 4.2, 6.2, ['ALMA 2 LEUVEN', 'ALMA 1 TIENSESTRAAT'], (m) => `BETALING MET KBC-DEBETKAART ${m}`);
-  led.scatter(0.2, 5, 14, ['SPAR LEUVEN TIENSESTRAAT', 'ALDI LEUVEN'], (m) => `BETALING MET KBC-DEBETKAART ${m}`);
-  led.scatter(0.08, 17, 17, ['DE LIJN'], () => 'DE LIJN 10-RITTENKAART LEUVEN');
+  // Campus Arenberg & VTK Engineering student life
+  led.at(-45, -42.5, 'VTK CURSUSDIENST', 'VTK CUDI ARENBERG 2E FASE BURGERLIJK INGENIEUR', 'card');
+  led.at(-32, -27.0, 'KU LEUVEN SPORTRAAD', 'KU LEUVEN SPORTKAART UNIV-FIT ARENBERG', 'card');
+  led.scatter(0.35, 3.8, 5.2, ['ALMA 3 ARENBERG', 'ALMA 1 TIENSESTRAAT', 'ALMA 2 LEUVEN'], (m) => `BETALING MET KBC-DEBETKAART ${m}`);
+  led.scatter(0.15, 2.5, 4.2, ['THEOKOT VTK ARENBERG'], (m) => `BETALING MET KBC-DEBETKAART ${m} BROODJE EN KOFFIE`);
 
-  // Occasional student job / tutoring in the past
-  led.at(-65, 85, 'KU LEUVEN MONITORING', 'STUDENTENJOB BEWAKING EXAMENS', 'transfer');
+  // Kot groceries & supplies
+  led.scatter(0.22, 6.5, 18.5, ['SPAR LEUVEN TIENSESTRAAT', 'COLRUYT LEUVEN', 'ALDI LEUVEN'], (m) => `BETALING MET KBC-DEBETKAART ${m}`);
+
+  // Travel home & around Leuven
+  led.scatter(0.12, 8.6, 8.6, ['NMBS LEUVEN'], () => 'NMBS WEEKENDRETOUR LEUVEN - GENT-ST-PIETERS');
+  led.scatter(0.06, 17.0, 17.0, ['DE LIJN'], () => 'DE LIJN 10-RITTENKAART LEUVEN');
+
+  // Occasional student job / tutoring in the past (built his €140 savings cushion)
+  led.at(-75, 120.0, 'KU LEUVEN MONITORING', 'STUDENTENJOB BEWAKING MIDDAGTOEZICHT EXAMENS', 'transfer');
+
+  // Peer payments with kotgenoten
+  led.at(-12, -9.2, 'PAYCONIQ', 'PAYCONIQ DOORREKENING KOTGENOTEN PIZZA DOMINOS', 'transfer');
+  led.at(-5, 4.8, 'PAYCONIQ', 'PAYCONIQ VAN LIAM TERUGBETALING PINTJES ELIXIR', 'transfer');
 
   // Historic fakbar nights (the budget-friendly student nights!)
   led.at(-8, -3.6, "FAKBAR 'T ELIXIR LEUVEN", "BETALING MET KBC-DEBETKAART FAKBAR 'T ELIXIR 3 PINTJES A €1.20", 'card');
@@ -330,6 +343,34 @@ function jasper(anchor: ISODate): PersonaData {
         counterparty: "FAKBAR 'T ELIXIR LEUVEN",
         description: "BETALING MET KBC-DEBETKAART FAKBAR 'T ELIXIR 3 PINTJES",
         channel: 'card',
+      },
+    },
+    {
+      id: 'alma_lunch',
+      label: l("Middageten: Alma 3 Arenberg (€ 4,80)", "Lunch: Alma 3 Arenberg (€4.80)"),
+      hint: l(
+        "Gezonde warme maaltijd aan studententarief, binnen het daglimiet van € 5,70.",
+        "Healthy student meal within the €5.70 daily allowance limit.",
+      ),
+      transaction: {
+        amount: -4.8,
+        counterparty: 'ALMA 3 ARENBERG',
+        description: 'BETALING MET KBC-DEBETKAART ALMA 3 DAGSCHOTEL',
+        channel: 'card',
+      },
+    },
+    {
+      id: 'weekly_allowance',
+      label: l("Wekelijks zakgeld ouders (+ € 100,00)", "Weekly allowance from parents (+ €100.00)"),
+      hint: l(
+        "De wekelijkse storting van € 100 herstelt Jasper's zichtrekening.",
+        "The weekly €100 deposit replenishes Jasper's current account.",
+      ),
+      transaction: {
+        amount: 100.0,
+        counterparty: 'PAPA & MAMA VANDENBERGHE',
+        description: 'ZAKGELD LEUVEN WEKELIJKSE BIJDRAGE',
+        channel: 'transfer',
       },
     },
   ]);

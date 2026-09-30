@@ -131,6 +131,7 @@ const RULES: MerchantRule[] = [
   { key: 'fakbar', name: 'Fakbar', match: /FAKBAR|ELIXIR|'T ELIXIR|RECUP|PAVLOV|DULCI|THEOKOT|'T VERZET/, category: 'restaurants' },
   { key: 'oude_markt', name: 'Café Oude Markt', match: /OUDE MARKT|CAFE BELGE|DE VRIJHEID|BAR OUDE MARKT/, category: 'restaurants' },
   { key: 'alma', name: 'Alma Studentenresto', match: /ALMA/, category: 'restaurants' },
+  { key: 'cudi', name: 'VTK Cursusdienst (CuDi)', match: /CUDI|CURSUSDIENST/, category: 'shopping' },
   { key: 'restaurant', name: 'Restaurant', match: /RESTAURANT|BRASSERIE|CAFE|FRITUUR|BAKKERIJ|PANOS|EXKI/, category: 'restaurants' },
 ];
 

@@ -89,7 +89,7 @@ export default function TipDetail() {
 
       <Pressable
         onPress={() => openVoice(insight)}
-        style={({ pressed }) => [styles.voiceTipBtn, pressed && { opacity: 0.85 }]}
+        style={({ pressed }) => [styles.voiceTipBtn, shadow, pressed && { opacity: 0.85 }]}
       >
         <Sparkles size={16} color={C.blue} />
         <T v="label" color={C.blue}>
@@ -245,6 +245,54 @@ export default function TipDetail() {
         <FeedbackButton icon={Clock} label={lang === 'nl' ? 'Later' : 'Later'} onPress={() => act('snooze')} />
         <FeedbackButton icon={ThumbsDown} label={lang === 'nl' ? 'Niet voor mij' : 'Not for me'} onPress={() => act('dismiss')} />
       </View>
+
+      {analysis.agents && analysis.agents.length > 0 && (
+        <Card style={{ marginTop: S.xl }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: S.sm, marginBottom: S.xs }}>
+            <Sparkles size={18} color={C.blue} />
+            <T v="h3" color={C.navy}>
+              {lang === 'nl' ? 'Kate Multi-Agent Swarm' : 'Kate Multi-Agent Swarm'}
+            </T>
+          </View>
+          <T v="tiny" color={C.muted} style={{ marginBottom: S.md }}>
+            {lang === 'nl'
+              ? '3 gespecialiseerde agents delibereren autonoom op de achtergrond:'
+              : '3 specialized agents deliberating autonomously in the background:'}
+          </T>
+          {analysis.agents.map((agent, idx) => (
+            <View key={agent.id} style={[styles.agentBox, idx < analysis.agents!.length - 1 && styles.agentBoxDivider]}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <T v="label" color={C.navy}>
+                  {agent.name}
+                </T>
+                <View style={styles.confidencePill}>
+                  <T v="tiny" color={C.blue} style={{ fontFamily: F.semibold }}>
+                    {Math.round(agent.confidence * 100)}% {lang === 'nl' ? 'zekerheid' : 'confidence'}
+                  </T>
+                </View>
+              </View>
+              <T v="tiny" color={C.muted} style={{ marginTop: 2 }}>
+                {t(agent.role)}
+              </T>
+              <T v="small" color={C.body} style={{ marginTop: 4 }}>
+                {t(agent.verdict)}
+              </T>
+              <View style={{ flexDirection: 'row', gap: S.xs, marginTop: 6, flexWrap: 'wrap' }}>
+                {agent.metrics.map((m, mi) => (
+                  <View key={mi} style={styles.agentMetricPill}>
+                    <T v="tiny" color={C.muted}>
+                      {t(m.label)}:
+                    </T>
+                    <T v="tiny" color={C.ink} style={{ fontFamily: F.semibold, marginLeft: 2 }}>
+                      {m.value}
+                    </T>
+                  </View>
+                ))}
+              </View>
+            </View>
+          ))}
+        </Card>
+      )}
 
       <Pressable onPress={() => setShowScore((v) => !v)} style={[styles.toggle, { alignSelf: 'center', marginTop: S.lg }]}>
         <T v="small" color={C.muted}>
@@ -418,7 +466,29 @@ const styles = StyleSheet.create({
     borderRadius: R.md,
     borderWidth: 1,
     borderColor: C.kateBg,
-    ...shadow,
+  },
+  agentBox: { paddingVertical: S.sm },
+  agentBoxDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: C.line,
+    paddingBottom: S.md,
+    marginBottom: S.sm,
+  },
+  confidencePill: {
+    backgroundColor: C.kateBg,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: R.pill,
+  },
+  agentMetricPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: C.bg,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: C.line,
   },
 });
 

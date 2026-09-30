@@ -248,5 +248,24 @@ export function detectSignals(txs: EnrichedTransaction[], streams: RecurringStre
     });
   }
 
+  // --- Student life: allowance, fakbars, campus resto, VTK CuDi
+  const allowanceTxs = txs.filter(
+    (tx) => tx.amount > 0 && /zakgeld|leefgeld|ouders|studietoelage/i.test(`${tx.counterparty} ${tx.description}`),
+  );
+  const studentLifeTxs = txs.filter((tx) =>
+    /fakbar|elixir|recup|alma|theokot|de nijl|cudi|cursusdienst|vtk/i.test(`${tx.counterparty} ${tx.description}`),
+  );
+  if (allowanceTxs.length >= 1 || studentLifeTxs.length >= 2) {
+    const evidenceTxs = [...allowanceTxs.slice(-1), ...studentLifeTxs.slice(-3)];
+    signals.push({
+      id: 'student_life',
+      date: studentLifeTxs[0]?.date ?? allowanceTxs[0]?.date ?? today,
+      confidence: allowanceTxs.length && studentLifeTxs.length >= 2 ? 0.98 : 0.92,
+      label: l('Student KU Leuven (VTK Burgerlijk Ingenieur)', 'KU Leuven student (VTK Engineering)'),
+      evidence: evidenceTxs.map((tx) => tx.id),
+      data: { weeklyAllowance: 100, faculty: 'VTK', campus: 'Arenberg' },
+    });
+  }
+
   return signals;
 }

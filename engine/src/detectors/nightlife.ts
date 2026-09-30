@@ -37,6 +37,8 @@ export const nightlifeBudget: Detector = (ctx) => {
   const savingPerNight = Math.round((totalSpent - elixirCost) * 100) / 100;
   const annualSaving = Math.round(savingPerNight * 20); // ~20 nights out in an academic year
 
+  const student = ctx.signal('student_life');
+  const confidence = student ? 0.98 : 0.95;
   const triggeredAt = recentNight[0].date;
 
   return {
@@ -53,7 +55,7 @@ export const nightlifeBudget: Detector = (ctx) => {
       `Spent ${euroL(totalSpent).en} last night on Oude Markt & De Nijl (67% of weekly budget). In 't ElixIr a beer is €1.20 instead of €4.00.`,
     ),
     annualValue: annualSaving,
-    confidence: 0.95,
+    confidence,
     triggeredAt,
     trigger: l(
       `Vannacht ${euroL(totalSpent).nl} uitgegeven op de Oude Markt en bij Snack De Nijl.`,
@@ -67,7 +69,7 @@ export const nightlifeBudget: Detector = (ctx) => {
       l(`Je gaf in één nacht 67% van je weekbudget uit (${euroL(totalSpent).nl}).`, `You spent 67% of your weekly budget in one night (${euroL(totalSpent).en}).`),
       l("In Fakbar 't ElixIr (VTK) betaal je € 1,20 per pintje, in Recup € 1,50, t.o.v. € 4,00 op de Oude Markt.", "In Fakbar 't ElixIr (VTK) a beer is €1.20, in Recup €1.50, vs €4.00 on Oude Markt."),
       l('Je durum bij Snack De Nijl kostte € 8,50.', 'Your durum at Snack De Nijl was €8.50.'),
-      l('Je restsaldo voor de rest van de week is € 28,50.', 'Your remaining balance for the rest of the week is €28.50.'),
+      l('Je restsaldo voor de rest van de week is € 28,50 (spaarbuffer van € 140 blijft intact).', 'Your remaining balance for the rest of the week is €28.50 (€140 savings buffer stays intact).'),
     ],
     breakdown: [
       line('Uitgegeven op Oude Markt', 'Spent on Oude Markt', euroL(drinksSpent)),

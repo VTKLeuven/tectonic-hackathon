@@ -1,4 +1,5 @@
 import { ASSUMPTIONS as A } from './assumptions';
+import { resolveSwarmAgents } from './agents';
 import { addDays, monthKey } from './dates';
 import type { CustomerProfile, Detector, DetectorContext } from './detectors/context';
 import { isInsight } from './detectors/context';
@@ -80,7 +81,7 @@ export function analyze(input: AnalyzeInput): Analysis {
 
   const ranking = rank(insights, feedback, prefs, today);
 
-  return {
+  const analysis: Analysis = {
     today,
     transactions,
     recurring,
@@ -90,6 +91,8 @@ export function analyze(input: AnalyzeInput): Analysis {
     featured: ranking.featured,
     energy: energyProfile(transactions, today),
   };
+  analysis.agents = resolveSwarmAgents(analysis, input.profile?.id);
+  return analysis;
 }
 
 export function dailyBalances(transactions: EnrichedTransaction[], opening: number, today: ISODate) {

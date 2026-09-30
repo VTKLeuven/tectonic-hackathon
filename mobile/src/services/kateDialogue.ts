@@ -33,6 +33,11 @@ export const COMMON_QUESTIONS: QuestionPrompt[] = [
     nl: 'Waarom zie ik niet méér tips?',
     en: 'Why do I not see more tips?',
   },
+  {
+    id: 'swarm_agents',
+    nl: 'Welke agents berekenden dit advies?',
+    en: 'Which agents calculated this advice?',
+  },
 ];
 
 export function getBriefingScript(
@@ -170,6 +175,13 @@ export function getAnswerScript(
         return `Kate kiest voor rust. We hebben bewust ${suppressedCount} mogelijke tips achtergehouden omdat ze onder je relevantiedrempel vielen of nog niet actueel waren. Alleen wat echt verschil maakt, komt op je scherm.`;
       }
 
+      case 'swarm_agents': {
+        if (persona.firstName === 'Jasper') {
+          return `Drie gespecialiseerde agents werkten autonoom samen: de Cashflow Sentinel bewaakt je resterende € 28,50 en je veilige spaarbuffer; de Leuven Nightlife Radar berekende de € 41,70 prijsarbitrage tussen de Oude Markt en 't ElixIr; en de Campus Concierge stemde dit af op je studentenleven aan VTK en Alma Arenberg.`;
+        }
+        return `Drie gespecialiseerde background agents evalueren parallel je transacties: een Energy Sentinel, een Subscription Auditor en een Wealth & Liquidity Sentinel.`;
+      }
+
       default:
         return `Ik help je graag met al je vragen over je verrichtingen en bancassurance-advies, ${firstName}.`;
     }
@@ -209,6 +221,13 @@ export function getAnswerScript(
 
     case 'why_restraint': {
       return `Kate values silence by default. We held back ${analysis.suppressed.length} potential recommendations because their financial impact or timing was below your threshold.`;
+    }
+
+    case 'swarm_agents': {
+      if (persona.firstName === 'Jasper') {
+        return `Three specialised agents collaborated: the Cashflow Sentinel protected your remaining 28 euros 50; the Leuven Nightlife Radar calculated the 41 euros 70 saving between Oude Markt and 't ElixIr; and the Campus Concierge tailored this to your student life at VTK and Alma Arenberg.`;
+      }
+      return `Three specialised background agents continuously evaluate your statements: an Energy Sentinel, a Subscription Auditor, and a Wealth & Liquidity Sentinel.`;
     }
 
     default:

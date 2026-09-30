@@ -26,3 +26,4 @@ export { buildPersona, bookLiveEvent, PERSONAS, PERSONA_IDS } from './personas';
 export type { Persona, PersonaData, PersonaId, LiveEvent } from './personas';
 export { applyFeedback } from './feedback';
 export type { FeedbackAction } from './feedback';
+export { resolveSwarmAgents } from './agents';
