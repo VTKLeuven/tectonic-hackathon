@@ -1,0 +1,17 @@
+{
+  "name": "@kate/engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Signal detection and nudge ranking engine for the Kate Radar prototype",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "type-check": "tsc --noEmit",
+    "report": "npx --yes tsx scripts/report.ts"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.3"
+  }
+}

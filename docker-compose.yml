@@ -1,0 +1,42 @@
+# Kate Radar demo.
+#
+#   docker compose up --build              website + app in the browser, http://localhost:8080
+#   HOST_IP=192.168.1.23 docker compose --profile expo up --build
+#                                           also an Expo dev server for Expo Go on your phone
+#
+# HOST_IP must be this machine's address on the Wi-Fi your phone uses.
+
+services:
+  web:
+    build: .
+    image: kate-radar-web
+    ports:
+      - "8080:8080"
+    environment:
+      HOST_IP: ${HOST_IP:-}
+    read_only: true
+    tmpfs:
+      - /tmp
+      # nginx renders its config here at start-up; uid 101 is the image's nginx user.
+      - /etc/nginx/conf.d:uid=101,gid=101,mode=0755
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+
+  expo:
+    profiles: ["expo"]
+    build:
+      context: .
+      dockerfile: mobile/Dockerfile
+    image: kate-radar-expo
+    ports:
+      - "8081:8081"
+    environment:
+      REACT_NATIVE_PACKAGER_HOSTNAME: ${HOST_IP:-}
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tty: true

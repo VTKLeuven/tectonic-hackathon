@@ -1,0 +1,94 @@
+import {
+  Baby,
+  Car,
+  CircleDashed,
+  Cloud,
+  Droplet,
+  Droplets,
+  Dumbbell,
+  Flame,
+  Fuel,
+  Hammer,
+  HeartPulse,
+  House,
+  KeyRound,
+  Landmark,
+  Music,
+  PiggyBank,
+  PlugZap,
+  Shield,
+  ShoppingBag,
+  ShoppingBasket,
+  Sofa,
+  Stamp,
+  Sun,
+  TrainFront,
+  Truck,
+  Tv,
+  Utensils,
+  Wallet,
+  Wifi,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react-native';
+
+import { CATEGORIES, type CategoryId, type Domain, type InsightType } from '../engine';
+
+/** The engine names icons by their lucide slug; this maps them to components. */
+const BY_NAME: Record<string, LucideIcon> = {
+  wallet: Wallet,
+  'key-round': KeyRound,
+  house: House,
+  'shopping-basket': ShoppingBasket,
+  zap: Zap,
+  flame: Flame,
+  sun: Sun,
+  droplet: Droplet,
+  droplets: Droplets,
+  fuel: Fuel,
+  'plug-zap': PlugZap,
+  car: Car,
+  'train-front': TrainFront,
+  tv: Tv,
+  music: Music,
+  cloud: Cloud,
+  wifi: Wifi,
+  dumbbell: Dumbbell,
+  shield: Shield,
+  sofa: Sofa,
+  hammer: Hammer,
+  truck: Truck,
+  stamp: Stamp,
+  landmark: Landmark,
+  utensils: Utensils,
+  'shopping-bag': ShoppingBag,
+  'heart-pulse': HeartPulse,
+  baby: Baby,
+  'piggy-bank': PiggyBank,
+  'circle-dashed': CircleDashed,
+};
+
+/** Icon per category, resolved once at module load. */
+export const CATEGORY_ICON = Object.fromEntries(
+  Object.values(CATEGORIES).map((c) => [c.id, BY_NAME[c.icon] ?? CircleDashed]),
+) as Record<CategoryId, LucideIcon>;
+
+export const INSIGHT_ICON: Record<InsightType, LucideIcon> = {
+  solar: Sun,
+  heat_pump: Flame,
+  renovation: House,
+  ev_switch: Car,
+  home_charging: PlugZap,
+  energy_contract: Zap,
+  streaming_rotation: Tv,
+  price_increase: Tv,
+  trial_converted: Tv,
+  pension_saving: PiggyBank,
+  idle_cash: Wallet,
+};
+
+export const DOMAIN_ICON: Record<Domain, LucideIcon> = {
+  energy: Zap,
+  subscriptions: Tv,
+  savings: PiggyBank,
+};

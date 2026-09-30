@@ -1,3 +1,0 @@
-"""
-KBC Equilibrium Backend Package
-"""

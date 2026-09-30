@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.expo/
+web-build/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.metro-health-check*
