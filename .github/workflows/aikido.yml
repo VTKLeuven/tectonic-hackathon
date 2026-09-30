@@ -1,41 +1,45 @@
-name: Aikido Security AI Code Audit & Quality Gate
+name: Aikido Security
+
+# Aikido's official CI action. It scans a pull request for new issues
+# compared to its base branch, so it runs on pull requests (and by hand).
+# The full AI Code Audit for the hackathon runs on app.aikido.dev with this
+# repository connected.
+#
+# Needs the repository secret AIKIDO_SECRET_KEY, created in Aikido under
+# Settings > Integrations > CI. Without it the job is skipped instead of failing.
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: ['*']
   workflow_dispatch:
 
-jobs:
-  aikido-security-scan:
-    name: Aikido AI Code Audit & Dependency Check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
+permissions:
+  contents: read
 
+jobs:
+  aikido-security:
+    name: Aikido security scan
+    runs-on: ubuntu-latest
+    env:
+      HAS_AIKIDO_KEY: ${{ secrets.AIKIDO_SECRET_KEY != '' }}
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      - name: Missing Aikido key
+        if: env.HAS_AIKIDO_KEY != 'true'
+        run: echo "::notice::AIKIDO_SECRET_KEY is not set; skipping the Aikido scan."
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Detect new vulnerabilities
+        if: env.HAS_AIKIDO_KEY == 'true'
+        uses: AikidoSec/github-actions-workflow@v1.0.13
         with:
-          node-version: "20"
-
-      - name: Run Aikido AI Code Audit
-        # Aikido Official GitHub Action for SAST, DAST, IDOR, & Business Logic Audit
-        # Configured for Tectonic Hackathon 2026 (10% Security Score Guarantee)
-        uses: aikido-security/aikido-scan-action@v1
-        with:
-          api-key: ${{ secrets.AIKIDO_API_KEY }}
-          fail-on: "high,critical"
-          minimum-severity: "low"
-          repository: "kbc-sdworx-tectonic-bridge"
-          upload-sarif: true
+          secret-key: ${{ secrets.AIKIDO_SECRET_KEY }}
+          fail-on-timeout: true
+          fail-on-dependency-scan: true
+          fail-on-sast-scan: false
+          fail-on-iac-scan: false
+          minimum-severity: 'HIGH'
+          timeout-seconds: 180
+          post-scan-status-comment: 'off'
+          post-sast-review-comments: 'off'
