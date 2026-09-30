@@ -115,6 +115,14 @@ describe('insights', () => {
     expect(after.score.timeliness).toBeGreaterThan(before.score.timeliness);
   });
 
+  it('detects Jasper nightlife spending and features the fakbar saving tip', () => {
+    const a = run('jasper');
+    expect(a.featured?.type).toBe('nightlife_budget');
+    expect(a.featured?.title.nl).toContain("'t ElixIr");
+    expect(a.featured?.evidence.some((e) => e.label.nl.includes('DE NIJL'))).toBe(true);
+    expect(a.featured?.evidence.some((e) => e.label.nl.includes('CAFE BELGE'))).toBe(true);
+  });
+
   it('is deterministic', () => {
     for (const id of PERSONA_IDS) {
       expect(JSON.stringify(run(id).insights)).toBe(JSON.stringify(run(id).insights));

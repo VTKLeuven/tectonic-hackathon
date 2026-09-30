@@ -85,6 +85,7 @@ export const INSIGHT_ICON: Record<InsightType, LucideIcon> = {
   trial_converted: Tv,
   pension_saving: PiggyBank,
   idle_cash: Wallet,
+  nightlife_budget: Utensils,
 };
 
 export const DOMAIN_ICON: Record<Domain, LucideIcon> = {

@@ -8,7 +8,7 @@ import { Ledger, MONTH_TAG } from './ledger';
  * few moments in a year that actually change something.
  */
 
-export type PersonaId = 'sarah' | 'tom' | 'janssens';
+export type PersonaId = 'sarah' | 'tom' | 'janssens' | 'jasper';
 
 export interface Persona {
   id: PersonaId;
@@ -103,6 +103,25 @@ export const PERSONAS: Record<PersonaId, Persona> = {
     savingsIban: 'BE09 7310 8820 1276',
     savingsBalance: 24_830.4,
     balance: 4_120.55,
+  },
+  jasper: {
+    id: 'jasper',
+    name: 'Jasper Vandenberghe',
+    firstName: 'Jasper',
+    initials: 'JV',
+    age: 20,
+    city: 'Leuven',
+    household: l('Student op kot in Leuven', 'Student in dorm in Leuven'),
+    tagline: l('Student met € 100 leefgeld per week', 'Student with €100 weekly allowance'),
+    story: l(
+      'Jasper studeert burgerlijk ingenieur in Leuven en krijgt elke week € 100 leefgeld van zijn ouders. Na een wilde nacht op de Oude Markt en een nachtelijke durum bij Snack De Nijl (€ 8,50) gaf hij in één nacht € 67 uit (67% van zijn weekbudget). Kate wekt hem met een vriendelijke wake-up call en toont hem hoe \'t ElixIr en andere fakbars zijn studentenbudget redden.',
+      'Jasper studies engineering in Leuven and receives €100 weekly allowance from his parents. Following a wild night on the Oude Markt and a late-night durum at Snack De Nijl (€8.50), he spent €67 in a single night (67% of his weekly budget). Kate wakes him with a gentle wake-up call and shows how \'t ElixIr and other fakbars protect his student budget.',
+    ),
+    accountName: 'KBC-Jongerenrekening',
+    iban: 'BE82 7330 1928 4421',
+    savingsIban: 'BE55 7330 1928 4490',
+    savingsBalance: 140.0,
+    balance: 28.5,
   },
 };
 
@@ -270,13 +289,59 @@ function janssens(anchor: ISODate): PersonaData {
   ]);
 }
 
-const BUILDERS: Record<PersonaId, (anchor: ISODate) => PersonaData> = { sarah, tom, janssens };
+function jasper(anchor: ISODate): PersonaData {
+  const led = new Ledger('jasper', anchor);
+
+  // Weekly allowance from parents: €100 every week
+  led.every(7, 100, 'PAPA & MAMA VANDENBERGHE', 'ZAKGELD LEUVEN WEKELIJKSE BIJDRAGE', 'transfer', { from: -392, to: -2 });
+
+  // Kot & student subscriptions
+  led.every(30.4, -5.99, 'SPOTIFY', 'SPOTIFY STUDENT SUBSCRIPTION', 'card', { from: -380 });
+
+  // Regular student life in Leuven
+  led.scatter(0.25, 4.2, 6.2, ['ALMA 2 LEUVEN', 'ALMA 1 TIENSESTRAAT'], (m) => `BETALING MET KBC-DEBETKAART ${m}`);
+  led.scatter(0.2, 5, 14, ['SPAR LEUVEN TIENSESTRAAT', 'ALDI LEUVEN'], (m) => `BETALING MET KBC-DEBETKAART ${m}`);
+  led.scatter(0.08, 17, 17, ['DE LIJN'], () => 'DE LIJN 10-RITTENKAART LEUVEN');
+
+  // Occasional student job / tutoring in the past
+  led.at(-65, 85, 'KU LEUVEN MONITORING', 'STUDENTENJOB BEWAKING EXAMENS', 'transfer');
+
+  // Historic fakbar nights (the budget-friendly student nights!)
+  led.at(-8, -3.6, "FAKBAR 'T ELIXIR LEUVEN", "BETALING MET KBC-DEBETKAART FAKBAR 'T ELIXIR 3 PINTJES A €1.20", 'card');
+  led.at(-16, -4.5, 'FAKBAR RECUP LEUVEN', 'BETALING MET KBC-DEBETKAART FAKBAR RECUP 3 STELLA A €1.50', 'card');
+  led.at(-24, -6.0, "FAKBAR 'T ELIXIR LEUVEN", "BETALING MET KBC-DEBETKAART FAKBAR 'T ELIXIR 5 PINTJES A €1.20", 'card');
+
+  // LAST NIGHT (-1 day): The big night out on Oude Markt & De Nijl totaling EXACTLY €67.00!
+  led.at(-1, -24.0, 'CAFE BELGE OUDE MARKT', 'BETALING MET KBC-DEBETKAART CAFE BELGE OUDE MARKT 6 STELLA', 'card');
+  led.at(-1, -20.0, 'DE VRIJHEID OUDE MARKT', 'BETALING MET KBC-DEBETKAART DE VRIJHEID OUDE MARKT 5 STELLA', 'card');
+  led.at(-1, -14.5, 'BAR OUDE MARKT 28', 'BETALING MET KBC-DEBETKAART BAR OUDE MARKT 28 LEUVEN', 'card');
+  led.at(-1, -8.5, 'SNACK DE NIJL LEUVEN', 'BETALING MET KBC-DEBETKAART SNACK DE NIJL NAAMSESTRAAT DURUM KEBAB', 'card');
+
+  return finalise(led, PERSONAS.jasper, [
+    {
+      id: 'fakbar_night',
+      label: l("Volgende avond: Fakbar 't ElixIr (€ 3,60)", "Next night: Fakbar 't ElixIr (€3.60)"),
+      hint: l(
+        "In 't ElixIr (de VTK-fakbar) betaal je maar € 1,20 per pintje i.p.v. € 4,00 op de Oude Markt.",
+        "In 't ElixIr (the VTK fakbar) a beer is just €1.20 instead of €4.00 on the Oude Markt.",
+      ),
+      transaction: {
+        amount: -3.6,
+        counterparty: "FAKBAR 'T ELIXIR LEUVEN",
+        description: "BETALING MET KBC-DEBETKAART FAKBAR 'T ELIXIR 3 PINTJES",
+        channel: 'card',
+      },
+    },
+  ]);
+}
+
+const BUILDERS: Record<PersonaId, (anchor: ISODate) => PersonaData> = { sarah, tom, janssens, jasper };
 
 export function buildPersona(id: PersonaId, anchor: ISODate): PersonaData {
   return BUILDERS[id](anchor);
 }
 
-export const PERSONA_IDS: PersonaId[] = ['sarah', 'tom', 'janssens'];
+export const PERSONA_IDS: PersonaId[] = ['sarah', 'tom', 'janssens', 'jasper'];
 
 /** Turn a live event into a booked transaction on `date`. */
 export function bookLiveEvent(persona: PersonaId, event: LiveEvent, date: ISODate): Transaction {

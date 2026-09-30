@@ -45,6 +45,7 @@ export const PRIORS: Record<InsightType, [number, number]> = {
   trial_converted: [6, 4],
   pension_saving: [5, 5],
   idle_cash: [4, 6],
+  nightlife_budget: [7, 3],
 };
 
 export const DOMAIN_OF: Record<InsightType, Domain> = {
@@ -59,6 +60,7 @@ export const DOMAIN_OF: Record<InsightType, Domain> = {
   trial_converted: 'subscriptions',
   pension_saving: 'savings',
   idle_cash: 'savings',
+  nightlife_budget: 'savings',
 };
 
 /** Below this, an insight is not worth anyone's attention. */
@@ -110,6 +112,8 @@ export function timeliness(insight: Insight, today: ISODate): number {
       return pensionSeason(today);
     case 'idle_cash':
       return 0.5;
+    case 'nightlife_budget':
+      return curve([[0, 1], [3, 0.9], [7, 0.5], [30, 0.2]], age);
   }
 }
 

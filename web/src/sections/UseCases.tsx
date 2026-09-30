@@ -81,6 +81,13 @@ const GENERAL: Row[] = [
     source: { persona: 'tom', type: 'pension_saving' },
   },
   {
+    line: 'CAFE BELGE, DE VRIJHEID, SNACK DE NIJL, - 67,00 in one night',
+    infers: 'Student spent 67% of € 100 weekly allowance in a single night',
+    when: 'The morning after, right when waking up',
+    says: '\'t ElixIr (VTK) and fakbars cost € 1.20 - € 1.50/beer instead of € 4.00 on Oude Markt',
+    source: { persona: 'jasper', type: 'nightlife_budget', suffix: 'up to ' },
+  },
+  {
     line: 'SPOTIFY 11,99 then 12,99',
     infers: 'A price rise of € 12 a year',
     when: 'Never',

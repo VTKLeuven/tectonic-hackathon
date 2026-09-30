@@ -3,6 +3,7 @@ import { addDays, monthKey } from './dates';
 import type { CustomerProfile, Detector, DetectorContext } from './detectors/context';
 import { isInsight } from './detectors/context';
 import { ENERGY_DETECTORS } from './detectors/energy';
+import { NIGHTLIFE_DETECTORS } from './detectors/nightlife';
 import { SAVINGS_DETECTORS } from './detectors/savings';
 import { SUBSCRIPTION_DETECTORS } from './detectors/subscriptions';
 import { categorise } from './merchants';
@@ -21,7 +22,7 @@ import type {
   Transaction,
 } from './types';
 
-export const DETECTORS: Detector[] = [...ENERGY_DETECTORS, ...SUBSCRIPTION_DETECTORS, ...SAVINGS_DETECTORS];
+export const DETECTORS: Detector[] = [...ENERGY_DETECTORS, ...SUBSCRIPTION_DETECTORS, ...SAVINGS_DETECTORS, ...NIGHTLIFE_DETECTORS];
 
 export interface AnalyzeInput {
   transactions: Transaction[];

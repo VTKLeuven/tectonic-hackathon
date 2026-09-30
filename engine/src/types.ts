@@ -151,7 +151,8 @@ export type InsightType =
   | 'price_increase'
   | 'trial_converted'
   | 'pension_saving'
-  | 'idle_cash';
+  | 'idle_cash'
+  | 'nightlife_budget';
 
 export type Domain = 'energy' | 'subscriptions' | 'savings';
 

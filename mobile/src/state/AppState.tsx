@@ -55,11 +55,11 @@ interface Persisted {
 const EMPTY_PERSONA: PersonaState = { booked: [], feedback: EMPTY_FEEDBACK };
 
 const INITIAL: Persisted = {
-  personaId: 'sarah',
+  personaId: 'jasper',
   lang: 'nl',
   prefs: DEFAULT_PREFS,
   notify: true,
-  byPersona: { sarah: EMPTY_PERSONA, tom: EMPTY_PERSONA, janssens: EMPTY_PERSONA },
+  byPersona: { sarah: EMPTY_PERSONA, tom: EMPTY_PERSONA, janssens: EMPTY_PERSONA, jasper: EMPTY_PERSONA },
 };
 
 interface Toast {

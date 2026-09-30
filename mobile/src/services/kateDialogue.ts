@@ -44,6 +44,10 @@ export function getBriefingScript(
   const firstName = persona.firstName;
 
   if (lang === 'nl') {
+    if (firstName === 'Jasper' || featured?.type === 'nightlife_budget') {
+      return `Goeiemorgen Jasper! Hopelijk heb je goed geslapen. Hoe was De Nijl gisteren? Ik raad je aan om volgende keer naar 't ElixIr of de fakbars te gaan in plaats van de Oude Markt. Je spendeerde vannacht 67 euro.`;
+    }
+
     if (featured?.type === 'heat_pump') {
       const saving = featured.annualValue ? euro(featured.annualValue, 'nl') : '€ 600';
       return `Dag ${firstName}! Kate hier. Ik merkte je recente stookolielevering op. Door over te schakelen naar een warmtepomp bespaar je zo'n ${saving} per jaar en verlaag je je uitstoot met 3,5 ton CO2. Met een KBC Energielening aan 3,49% spreid je de investering zonder aan je veilige spaarbuffer te raken.`;
@@ -62,6 +66,10 @@ export function getBriefingScript(
   }
 
   // English fallback
+  if (firstName === 'Jasper' || featured?.type === 'nightlife_budget') {
+    return `Good morning Jasper! Hope you slept well. How was De Nijl yesterday? I recommend heading to 't ElixIr or other faculty bars next time instead of the Oude Markt. Last night you spent 67 euros.`;
+  }
+
   if (featured?.type === 'heat_pump') {
     const saving = featured.annualValue ? euro(featured.annualValue, 'en') : '€600';
     return `Hello ${firstName}! This is Kate. I noticed your recent heating oil delivery. Switching to a heat pump could save you around ${saving} a year and reduce your carbon footprint by 3.5 tonnes. An energy loan lets you spread the cost easily while keeping your savings intact.`;
@@ -83,6 +91,10 @@ export function getTipDetailScript(
   const firstName = persona.firstName;
 
   if (lang === 'nl') {
+    if (insight.type === 'nightlife_budget') {
+      return `Jasper, gisteravond gaf je 67 euro uit op de Oude Markt en bij Snack De Nijl aan een durum van 8 euro 50. Dat is 67 procent van je weekbudget van 100 euro. In Fakbar 't ElixIr kost een pintje 1 euro 20 en in Recup 1 euro 50, tegenover 4 euro op de Oude Markt. Door te switchen bespaar je meer dan 40 euro per avond en hou je comfortabel geld over voor de rest van de week!`;
+    }
+
     if (insight.type === 'heat_pump') {
       return `Sarah, je verwarmt momenteel met stookolie. Een warmtepomp verlaagt je energiekosten drastisch en bespaart zo'n 3,5 ton CO2 per jaar. Een KBC Energielening kost je ongeveer € 78 per maand, terwijl je maandelijkse brandstofbesparing daar al een groot deel van compenseert.`;
     }
@@ -103,6 +115,9 @@ export function getTipDetailScript(
   }
 
   // English fallback
+  if (insight.type === 'nightlife_budget') {
+    return `Jasper, last night you spent 67 euros on the Oude Markt and at Snack De Nijl on an 8 euro 50 durum. That is 67 percent of your 100 euro weekly allowance. In Fakbar 't ElixIr beers are 1 euro 20 and in Recup 1 euro 50, vs 4 euros on the Oude Markt. Switching saves over 40 euros per night!`;
+  }
   return `${firstName}, here is your personal briefing for ${insight.title[lang]}. Calculated directly from your recent payment rhythm with zero questions asked.`;
 }
 
@@ -121,16 +136,25 @@ export function getAnswerScript(
   if (lang === 'nl') {
     switch (questionId) {
       case 'afford_savings': {
+        if (persona.firstName === 'Jasper') {
+          return `Je zichtrekening heeft nu nog een saldo van 28 euro 50. Als je de rest van de week in 't ElixIr (1 euro 20) drinkt en in Alma eet, kom je precies toe zonder aan je spaarbuffer van 140 euro te raken.`;
+        }
         const savings = euro(persona.savingsBalance, 'nl');
         const cost = tip?.upfrontCost ? euro(tip.upfrontCost, 'nl') : '€ 9.500';
         return `Je spaarsaldo bedraagt momenteel ${savings}. De investering vraagt naar schatting ${cost}. Je kan dit uit eigen middelen betalen, maar met een KBC Energielening aan 3,49% behoud je je veilige financiële reserve voor onverwachte uitgaven.`;
       }
 
       case 'why_now': {
+        if (persona.firstName === 'Jasper') {
+          return `Omdat je vannacht 67 euro hebt uitgegeven op de Oude Markt en bij De Nijl (8 euro 50 voor je durum). Kate spreekt alleen op het moment dat het echt telt: de ochtend na een zware uitgave.`;
+        }
         return `Kate let op het exacte moment. We analyseren het ritme van je verrichtingen en spreken pas als een gebeurtenis zoals een verhuis of een factuur relevant wordt. Zo voorkomen we onnodige meldingen.`;
       }
 
       case 'fixed_costs': {
+        if (persona.firstName === 'Jasper') {
+          return `Je hebt momenteel enkel Spotify Student als vast abonnement aan 5 euro 99 per maand. De rest van je 100 euro wekelijkse leefgeld is vrij voor je dagelijkse studentenleven.`;
+        }
         const fixed = analysis.recurring.filter(
           (s) => s.active && !['savings', 'pension_saving'].includes(s.category)
         );
@@ -154,16 +178,25 @@ export function getAnswerScript(
   // English
   switch (questionId) {
     case 'afford_savings': {
+      if (persona.firstName === 'Jasper') {
+        return `Your current account balance is currently 28 euros 50. Sticking to fakbars and Alma student dining will get you through the week without touching your 140 euros savings buffer.`;
+      }
       const savings = euro(persona.savingsBalance, 'en');
       const cost = tip?.upfrontCost ? euro(tip.upfrontCost, 'en') : '€9,500';
       return `Your savings balance is currently ${savings}. The estimated upfront investment is ${cost}. While you could fund this entirely yourself, an energy loan at 3.49% keeps your rainy-day cushion intact.`;
     }
 
     case 'why_now': {
+      if (persona.firstName === 'Jasper') {
+        return `Because you spent 67 euros last night on Oude Markt and at De Nijl. Kate speaks up only when it matters: the morning after a major spend.`;
+      }
       return `Kate prioritises timing. We monitor the rhythm of your statements and only suggest options when triggered by a meaningful milestone, such as moving into a new home or receiving an oil bill.`;
     }
 
     case 'fixed_costs': {
+      if (persona.firstName === 'Jasper') {
+        return `You only have 1 recurring fixed cost: Spotify Student at 5 euros 99 a month. The rest of your 100 euro weekly allowance is available for daily student expenses.`;
+      }
       const fixed = analysis.recurring.filter(
         (s) => s.active && !['savings', 'pension_saving'].includes(s.category)
       );

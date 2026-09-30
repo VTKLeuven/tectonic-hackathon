@@ -45,6 +45,30 @@ export default function Home() {
       </View>
 
       <View style={{ paddingHorizontal: S.lg, marginTop: -56 }}>
+        {persona.firstName === 'Jasper' && (
+          <Pressable
+            onPress={() => openVoice(analysis.featured ?? undefined)}
+            style={({ pressed }) => [styles.wakeUpBanner, pressed && { opacity: 0.88 }]}
+          >
+            <View style={styles.wakeUpIcon}>
+              <Sparkles size={18} color="#FFFFFF" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <T v="label" color={C.navy}>
+                {lang === 'nl' ? '⏰ Kate Ochtend Briefing' : '⏰ Kate Morning Briefing'}
+              </T>
+              <T v="small" color={C.muted} numberOfLines={1}>
+                {lang === 'nl' ? 'Goeiemorgen Jasper, hoe was De Nijl gisteren?' : 'Good morning Jasper, how was De Nijl?'}
+              </T>
+            </View>
+            <View style={styles.listenPill}>
+              <T v="small" color="#FFFFFF" style={{ fontFamily: F.semibold }}>
+                {lang === 'nl' ? 'Beluister' : 'Play'}
+              </T>
+            </View>
+          </Pressable>
+        )}
+
         <Pressable onPress={() => router.push('/verrichtingen')} style={({ pressed }) => [styles.account, pressed && { opacity: 0.95 }]}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <View>
@@ -150,5 +174,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.kateBg,
     ...shadow,
+  },
+  wakeUpBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: S.md,
+    backgroundColor: C.kateBg,
+    borderRadius: R.lg,
+    padding: S.md,
+    marginBottom: S.md,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 163, 224, 0.3)',
+    ...shadow,
+  },
+  wakeUpIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: C.blue,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listenPill: {
+    backgroundColor: C.blue,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: R.pill,
   },
 });

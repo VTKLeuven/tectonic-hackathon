@@ -90,8 +90,8 @@ export function KateVoiceModal({ visible, onClose, targetTip }: KateVoiceModalPr
     setCustomQuestion('');
     // Answer contextually
     const answer = lang === 'nl'
-      ? `Sarah, wat betreft je vraag "${text}": Kate analyseert continu je verrichtingen om je hierin te begeleiden.`
-      : `Sarah, regarding "${text}": Kate continuously monitors your transactions to assist you.`;
+      ? `${data.persona.firstName}, wat betreft je vraag "${text}": Kate analyseert continu je verrichtingen om je hierin te begeleiden.`
+      : `${data.persona.firstName}, regarding "${text}": Kate continuously monitors your transactions to assist you.`;
     void voiceService.speak(answer, lang);
   }
 

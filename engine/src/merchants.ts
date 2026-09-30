@@ -127,6 +127,10 @@ const RULES: MerchantRule[] = [
   { key: 'pharmacy', name: 'Apotheek', match: /APOTHEEK|PHARMACIE/, category: 'health' },
   { key: 'childcare', name: 'Kinderopvang', match: /KINDEROPVANG|KRIBBE|SCHOOL|KINDERBIJSLAG|GROEIPAKKET/, category: 'childcare' },
   { key: 'deliveroo', name: 'Deliveroo', match: /DELIVEROO|TAKEAWAY|UBER ?EATS/, category: 'restaurants' },
+  { key: 'snack_de_nijl', name: 'Snack De Nijl', match: /DE NIJL|SNACK DE NIJL/, category: 'restaurants' },
+  { key: 'fakbar', name: 'Fakbar', match: /FAKBAR|ELIXIR|'T ELIXIR|RECUP|PAVLOV|DULCI|THEOKOT|'T VERZET/, category: 'restaurants' },
+  { key: 'oude_markt', name: 'Café Oude Markt', match: /OUDE MARKT|CAFE BELGE|DE VRIJHEID|BAR OUDE MARKT/, category: 'restaurants' },
+  { key: 'alma', name: 'Alma Studentenresto', match: /ALMA/, category: 'restaurants' },
   { key: 'restaurant', name: 'Restaurant', match: /RESTAURANT|BRASSERIE|CAFE|FRITUUR|BAKKERIJ|PANOS|EXKI/, category: 'restaurants' },
 ];
 
@@ -155,9 +159,12 @@ export function categorise(tx: Transaction): EnrichedTransaction {
   const text = `${tx.counterparty} | ${tx.description}`.toUpperCase();
   const facts = parseFacts(text);
 
-  // Salary is recognised by direction and wording, not by employer.
+  // Salary or student allowance is recognised by direction and wording, not by employer.
   if (tx.amount > 0 && /\bLOON\b|SALARIS|WEDDE|VAKANTIEGELD|EINDEJAARSPREMIE/.test(text)) {
     return { ...tx, category: 'income', merchantKey: `employer:${normalise(tx.counterparty)}`, merchantName: tx.counterparty, facts };
+  }
+  if (tx.amount > 0 && /\b(ZAKGELD|LEEFGELD|OUDERS|STUDIETOELAGE)\b/.test(text)) {
+    return { ...tx, category: 'income', merchantKey: `family:${normalise(tx.counterparty)}`, merchantName: tx.counterparty, facts };
   }
 
   for (const rule of RULES) {
