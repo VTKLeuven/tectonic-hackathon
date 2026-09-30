@@ -9,7 +9,17 @@ Kate Radar reads the transactions KBC already processes and turns the few that m
 - **Quiet by default.** At most one tip on the home screen. Too small, too uncertain, or dismissed means silent.
 - **Shows its work.** Every tip lists the transactions behind it, the calculation and the assumptions.
 
-Energy is the deep use case (solar, heat pump, EPC renovation obligation, EV switch, home charging, energy contract). Subscriptions and savings show that the same pipeline is general.
+Energy is the deep use case (solar, heat pump, EPC renovation obligation, EV switch, home charging, energy contract). Subscriptions, savings and a student's budget after a night out in Leuven show that the same pipeline is general.
+
+## Description
+
+Banks personalise by asking: forms, questionnaires, campaigns. KBC already holds the richest signal there is, every transaction. Kate Radar reads it and turns the few moments that matter into timely, explainable advice inside KBC Mobile, delivered by Kate, without asking the customer a single question.
+
+A notary deed and a moving company mean Sarah moved into a home she owns; once the boxes are unpacked, Kate suggests solar panels sized on her own electricity advance. The day a € 1,575 heating oil delivery is booked, Kate compares a heat pump: about € 600 a year and 3.5 t CO₂ less. A garage bill triggers an EV comparison, a fourth streaming service triggers a question, and a € 12 Spotify price rise stays silent.
+
+Every tip shows why now, which transactions triggered it, the calculation and its assumptions. Tips are ranked on value × confidence × timing × preference, where preference is learned across customers and updated by one-tap feedback, and the home screen shows at most one. With Kate Voice, Kate reads a tip aloud and answers follow-up questions about it.
+
+The engine is a pure TypeScript function, about 4 ms per customer and with no language model in the decision loop, so it scales to 2.3 million customers. It powers an Expo prototype of KBC Mobile and a demo website with a live simulator. Everything runs with `docker compose up`.
 
 ## Run the demo
 
@@ -32,7 +42,7 @@ The website then shows a QR code for Expo Go (phone and laptop on the same Wi-Fi
 ### Without Docker
 
 ```bash
-cd engine && npm install && npm test        # 17 tests on the engine
+cd engine && npm install && npm test        # engine test suite
 cd mobile && npm install && npm start       # Expo dev server; press w for web, scan for Expo Go
 cd web && npm install && npm run dev        # website on http://localhost:5173
 ```
