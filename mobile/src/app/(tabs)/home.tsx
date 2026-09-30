@@ -47,7 +47,7 @@ export default function Home() {
       <View style={{ paddingHorizontal: S.lg, marginTop: -56 }}>
         {persona.firstName === 'Jasper' && (
           <Pressable
-            onPress={() => openVoice(analysis.featured ?? undefined)}
+            onPress={() => openVoice()}
             style={({ pressed }) => [styles.wakeUpBanner, pressed && { opacity: 0.88 }]}
           >
             <View style={styles.wakeUpIcon}>

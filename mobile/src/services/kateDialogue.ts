@@ -96,8 +96,8 @@ export function getTipDetailScript(
   const firstName = persona.firstName;
 
   if (lang === 'nl') {
-    if (insight.type === 'nightlife_budget') {
-      return `Jasper, gisteravond gaf je 67 euro uit op de Oude Markt en bij Snack De Nijl aan een durum van 8 euro 50. Dat is 67 procent van je weekbudget van 100 euro. In Fakbar 't ElixIr kost een pintje 1 euro 20 en in Recup 1 euro 50, tegenover 4 euro op de Oude Markt. Door te switchen bespaar je meer dan 40 euro per avond en hou je comfortabel geld over voor de rest van de week!`;
+    if (insight.type === 'nightlife_budget' || firstName === 'Jasper') {
+      return `Goeiemorgen Jasper! Hopelijk heb je goed geslapen. Hoe was De Nijl gisteren? Ik raad je aan om volgende keer naar 't ElixIr of de fakbars te gaan in plaats van de Oude Markt. Je spendeerde vannacht 67 euro.`;
     }
 
     if (insight.type === 'heat_pump') {
@@ -120,8 +120,8 @@ export function getTipDetailScript(
   }
 
   // English fallback
-  if (insight.type === 'nightlife_budget') {
-    return `Jasper, last night you spent 67 euros on the Oude Markt and at Snack De Nijl on an 8 euro 50 durum. That is 67 percent of your 100 euro weekly allowance. In Fakbar 't ElixIr beers are 1 euro 20 and in Recup 1 euro 50, vs 4 euros on the Oude Markt. Switching saves over 40 euros per night!`;
+  if (insight.type === 'nightlife_budget' || firstName === 'Jasper') {
+    return `Good morning Jasper! Hope you slept well. How was De Nijl yesterday? I recommend heading to 't ElixIr or other faculty bars next time instead of the Oude Markt. Last night you spent 67 euros.`;
   }
   return `${firstName}, here is your personal briefing for ${insight.title[lang]}. Calculated directly from your recent payment rhythm with zero questions asked.`;
 }
